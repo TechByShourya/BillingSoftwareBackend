@@ -29,7 +29,7 @@ public class FilterConfig {
 			}
 		});
 		registrationBean.addUrlPatterns("/v1/api/*");
-		registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
 		return registrationBean;
 	}
 
