@@ -25,15 +25,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		String path = request.getRequestURI();
+		return PUBLIC_PATHS.contains(path) || "OPTIONS".equalsIgnoreCase(request.getMethod());
+	}
+
+	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws ServletException, IOException {
-		String path = request.getRequestURI();
-
-		if (PUBLIC_PATHS.contains(path) || "OPTIONS".equalsIgnoreCase(request.getMethod())) {
-			filterChain.doFilter(request, response);
-			return;
-		}
-
 		String header = request.getHeader("Authorization");
 		if (header == null || !header.startsWith("Bearer ")) {
 			throw new InvalidTokenException("Authorization header with Bearer token is required.");
@@ -51,3 +50,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 }
+
